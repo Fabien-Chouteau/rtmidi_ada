@@ -1,2 +1,2 @@
 # rtmidi_ada
-Ada binding for the rtMIDI library
+Ada "middleweight" binding for the rtMIDI library

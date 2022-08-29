@@ -1,0 +1,9 @@
+name = "rtmidi"
+description = "Ada \"middleweight\" binding for the rtMIDI library"
+version = "0.1.0-dev"
+website="https://github.com/Fabien-Chouteau/rtmidi_ada"
+tags=["midi", "rtmidi", "music"]
+
+authors = ["Fabien Chouteau"]
+maintainers = ["Fabien Chouteau <fabien.chouteau@gmail.com>"]
+maintainers-logins = ["Fabien-Chouteau"]
