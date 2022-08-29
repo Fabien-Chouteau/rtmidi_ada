@@ -65,7 +65,7 @@ package body RtMIDI is
                                    unsigned (Port_Numer),
                                    bufOut => Null_Ptr,
                                    bufLen => Len'Access);
-      if Err < 0 then
+      if Err < 0 or else Len <= 0 then
          return "";
       end if;
 

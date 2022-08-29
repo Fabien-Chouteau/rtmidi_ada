@@ -17,6 +17,8 @@ begin
         with "RtMIDI Error: '" & Error_Message (Test_Out) & "'";
    end if;
 
+   Put_Line ("Available_Port_Count Input:" &
+               Available_Port_Count (Test_In)'Img);
    for X in 1 .. Available_Port_Count (Test_In) loop
       declare
          Name : constant String := Port_Name (Test_In, X);
@@ -28,41 +30,41 @@ begin
       end;
    end loop;
 
-   if Port_Found > 0 then
+   if Port_Found <= 0 then
+      Put_Line ("Cannot find the port we just openned. Use default one...");
+      Port_Found := 0;
+   end if;
 
-      Open_Port (Test_In, Port_Found, "Test input virt port");
+   Open_Port (Test_In, Port_Found, "Test input virt port");
 
-      if Error (Test_In) then
+   if Error (Test_In) then
+      raise Program_Error
+        with "RtMIDI Error: '" & Error_Message (Test_In) & "'";
+   end if;
+
+   declare
+      Success : Boolean;
+   begin
+      Send_Message (Test_Out, (16#90#, 16#3C#, 16#40#), Success);
+      if not Success then
          raise Program_Error
            with "RtMIDI Error: '" & Error_Message (Test_In) & "'";
       end if;
 
+      delay 0.5;
+
       declare
-         Success : Boolean;
+         Message : constant Storage_Array := Get_Message (Test_In);
+         package MIO is new Ada.Text_IO.Modular_IO (Storage_Element);
       begin
-         Send_Message (Test_Out, (16#90#, 16#3C#, 16#40#), Success);
-         if not Success then
-            raise Program_Error
-              with "RtMIDI Error: '" & Error_Message (Test_In) & "'";
-         end if;
-
-         delay 0.5;
-
-         declare
-            Message : constant Storage_Array := Get_Message (Test_In);
-            package MIO is new Ada.Text_IO.Modular_IO (Storage_Element);
-         begin
-            Put ("Got message: '");
-            for Elt of Message loop
-               MIO.Put (Elt, Base => 16);
-            end loop;
-            Put_Line ("'");
-         end;
-
+         Put ("Got message: '");
+         for Elt of Message loop
+            MIO.Put (Elt, Base => 16);
+         end loop;
+         Put_Line ("'");
       end;
-   else
-      raise Program_Error with "RtMIDI cannot find port";
-   end if;
+
+   end;
 
    Close_Port (Test_Out);
    Close_Port (Test_In);
