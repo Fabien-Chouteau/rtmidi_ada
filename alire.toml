@@ -8,3 +8,6 @@ licenses = "MIT"
 authors = ["Fabien Chouteau"]
 maintainers = ["Fabien Chouteau <fabien.chouteau@gmail.com>"]
 maintainers-logins = ["Fabien-Chouteau"]
+
+[[depends-on]]
+librtmidi = "*"
