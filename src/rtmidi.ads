@@ -41,10 +41,12 @@ package RtMIDI is
    --
    --  This function returns the number of MIDI ports of the selected API.
 
-   function Port_Name (Device     : MIDI_In;
-                       Port_Numer : Positive)
+   function Port_Name (Device      : MIDI_In;
+                       Port_Number : Natural)
                        return String
      with Pre => Valid (Device);
+   --  Return a name for the given Port_Number between 0 and
+   --  Available_Port_Count () - 1.
 
    procedure Open_Port (Device      : MIDI_In;
                         Port_Number : Natural;
@@ -159,10 +161,12 @@ package RtMIDI is
    --
    --  This function returns the number of MIDI ports of the selected API.
 
-   function Port_Name (Device     : MIDI_Out;
-                       Port_Numer : Positive)
+   function Port_Name (Device      : MIDI_Out;
+                       Port_Number : Natural)
                        return String
      with Pre => Valid (Device);
+   --  Return a name for the given Port_Number between 0 and
+   --  Available_Port_Count () - 1.
 
    procedure Open_Port (Device      : MIDI_Out;
                         Port_Number : Natural;
@@ -227,8 +231,8 @@ private
 
    function Available_Port_Count (Device : MIDI_Any) return Natural;
 
-   function Port_Name (Device     : MIDI_Any;
-                       Port_Numer : Positive)
+   function Port_Name (Device      : MIDI_Any;
+                       Port_Number : Natural)
                        return String;
 
    type MIDI_In is new System.Address;

@@ -54,15 +54,15 @@ package body RtMIDI is
    -- Port_Name --
    ---------------
 
-   function Port_Name (Device     : MIDI_Any;
-                       Port_Numer : Positive)
+   function Port_Name (Device      : MIDI_Any;
+                       Port_Number : Natural)
                        return String
    is
       Len : aliased int;
       Err : int;
    begin
       Err := rtmidi_get_port_name (Device,
-                                   unsigned (Port_Numer),
+                                   unsigned (Port_Number),
                                    bufOut => Null_Ptr,
                                    bufLen => Len'Access);
       if Err < 0 or else Len <= 0 then
@@ -76,10 +76,11 @@ package body RtMIDI is
          C_Str : char_array_access := new char_array (1 .. size_t (Len));
       begin
          Err := rtmidi_get_port_name (Device,
-                                      unsigned (Port_Numer),
+                                      unsigned (Port_Number),
                                       bufOut => To_Chars_Ptr (C_Str),
                                       bufLen => Len'Access);
          if Err < 0 then
+            Free (C_Str);
             return "";
          end if;
 
@@ -136,10 +137,10 @@ package body RtMIDI is
    -- Port_Name --
    ---------------
 
-   function Port_Name (Device     : MIDI_In;
-                       Port_Numer : Positive)
+   function Port_Name (Device      : MIDI_In;
+                       Port_Number : Natural)
                        return String
-   is (Port_Name (MIDI_Any (Device), Port_Numer));
+   is (Port_Name (MIDI_Any (Device), Port_Number));
 
    ---------------
    -- Open_Port --
@@ -203,12 +204,13 @@ package body RtMIDI is
                          return System.Storage_Elements.Storage_Array
    is
       use System.Storage_Elements;
-      Message : Storage_Array (1 .. 1024);
+      Message : Storage_Array (1 .. 64);
       Size    : aliased size_t;
 
       Unused : double;
    begin
 
+      Size := Message'Length;
       Unused := Get_Message (Device, Message'Address, Size'Access);
 
       return Message (1 .. Storage_Offset (Size));
@@ -303,10 +305,10 @@ package body RtMIDI is
    -- Port_Name --
    ---------------
 
-   function Port_Name (Device     : MIDI_Out;
-                       Port_Numer : Positive)
+   function Port_Name (Device      : MIDI_Out;
+                       Port_Number : Natural)
                        return String
-   is (Port_Name (MIDI_Any (Device), Port_Numer));
+   is (Port_Name (MIDI_Any (Device), Port_Number));
 
    ---------------
    -- Open_Port --
