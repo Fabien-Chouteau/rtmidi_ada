@@ -1,6 +1,6 @@
 name = "rtmidi"
 description = "Ada \"middleweight\" binding for the rtMIDI library"
-version = "0.2.0-dev"
+version = "0.2.0"
 website="https://github.com/Fabien-Chouteau/rtmidi_ada"
 tags=["midi", "rtmidi", "music"]
 licenses = "MIT"
